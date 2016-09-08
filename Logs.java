@@ -1,10 +1,9 @@
-package com.uu898.mobileorder.utils;
+ï»¿package com.uu898.mobileorder.utils;
 
 import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
 /**
- * ÈÕÖ¾Êä³ö
  * @author xingbo.chai
  *
  */
