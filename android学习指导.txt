@@ -1,4 +1,5 @@
 android学习之路
+一、初级学习：
 	1.四大组件：
 	 Activity ：生命周期管理、 Intent/序列化 、 LanuchMode 和 Flag
 	 Service ： StartService/stopService 、 bindService/unbindService 、 跨进程 、binder/aidl 、 IntentService  
