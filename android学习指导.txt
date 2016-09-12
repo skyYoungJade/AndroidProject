@@ -1,0 +1,96 @@
+android学习之路
+	1.四大组件：
+	 Activity ：生命周期管理、 Intent/序列化 、 LanuchMode 和 Flag
+	 Service ： StartService/stopService 、 bindService/unbindService 、 跨进程 、binder/aidl 、 IntentService  
+	 Broadcast Receiver : LocalBroadcastManager 、普通和有序广播
+	 Content Provider ：常见的增删改查 、 ContentObserver 、 实现ContentProvider
+	 
+    2.常见的ViewGroup使用（LinearLayout / RelativeLayout / FrameLayout...）、基础控件使用(TextView / Button / ImageView / EditText ...)
+
+	3.高级控件使用：ListView / RecycleView / Toolbar / ViewPager / WebView (常见使用、和JS交互) / SurfaceView
+	  自定义View实现：onMeasure / onDraw / onLayout / 自定义属性
+	  
+	4.Fragment：生命周期 、 基本使用 、 状态恢复保存
+	  事件处理：事件分发机制、 多点触摸 、 GestureDetector
+	  绘画基础：drawable(BitmapDrawable / NinePatchDrawable / LayerDrawable...) 、自定义绘制
+	 
+	5.动画 : 帧动画 、 属性动画 、 补间动画
+	  通知栏：系统style 、 自定义RemoteView
+	  widget 
+	  Material Design
+	  
+	6.数据存储： SharePreference 、私有存储目录和SD卡 、 sqlite 、ContentProvider来实现数据读写
+	
+	7.进程：进程的优先级 、 lowMemoryKiller  、 Service,Activity等多进程实现
+	  线程：线程和线程池的使用 、 Handler / HandlerThread 、 AsyncTask  、 Loader
+	  
+	8.网络： 
+			HttpClient / HttpUrlConnection常见使用 （发送请求 、 解析返回数据; 错误httpcode处理; CookieStore/代理/超时/重试等设置）
+			文件上传下载
+	
+二、进阶学习
+	
+	9.资源管理和打包： 
+					打包流程 ： 编译 、 混淆 、 签名 、 Gradle ....
+					资源管理 ： AssetManager 、 Resource 、 主题样式 、 多分辨率适配
+	  
+	  视图架构：	
+				Activity的视图层级
+				布局生成过程
+				
+	10.优化：掉帧卡顿、cpu/内存占用过高，内存泄露 、过度绘制 、 电量优化（WakeLock/JobScheduler) 、 ANR 、排查工具（Lint / StrictMode / MAT / HierarchyViewer / 开发者选项）
+	   NDK开发
+
+三、编程基础
+
+	11.编程语言：
+				java：语法结构 、 常见I/O 、多线程并发 、 虚拟机基础知识 、 面向对象设计 、 设计模式
+				C/C++
+				shell:常见命令使用
+	   操作系统：
+	   数据结构和算法：
+	   
+	12.网络协议：
+				tcp/udp
+				http/https: 数据报文结构 、 HttpCode,常见Header 、 文件上传
+				抓包工具使用：Wireshark 、 HttpScoop 、 tcpdump
+	
+	13.数据库：SQL语法 、 索引优化 、范式 
+	
+四、开源框架
+	
+	14.开源框架：
+				图片加载：Fresco / Glide / Picasso 
+				推送： 小米 、 友盟 、极光
+				分享：友盟分享、sharesdk
+				事件分发：EventBus / Otto 
+				异步加载：RxJava
+				网络：Retrofit / OkHttp / Volley 
+				HyBrid: React Native
+				
+五、测试基础
+	
+	15.测试基础：
+				测试方法： 冒烟测试 、 边界测试 、 回归测试 、 单元测试
+				MonkeyTest；
+				Android Instrumentation:
+				
+六、其他
+					
+	16.补充内容：
+				其他：Android 加固、crash/ANR收集 、 软件内更新 、 多渠道打包 
+					 换肤（自定义资源加载 、 换色）
+					 自定义协议
+					 Android studio
+					 adb等工具
+				技术关注：
+						热补丁
+						插件化
+						
+					
+				
+		
+			
+	  
+	  
+	
