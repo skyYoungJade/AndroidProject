@@ -1,0 +1,27 @@
+一、Activity的状态
+	Activity在android系统中用一个LIFO机制（后进先出）的Activity的栈来管理。
+	当新的Activity_1 启动时，他就会被放到栈顶，而进入运行状态。之前运行的Activity_2则在Activity_1下面，
+	当Activity_1退出之后，Activity_2就会到栈顶处于前台运行状态。
+	
+	1.Activity有三种状态：
+	  - RESUMED （也叫 Active 或 Running状态）:当Activity在屏幕前台运行时（位于当前任务堆栈顶部），此时该Activity获得用户输入焦点。
+	  - PAUSED : 当他失去焦点但仍对用户可见。此时 Activity可能透明 或 部分被遮盖。暂停的Activity仍是存活状态
+				（它保留所有状态和成员信息并连接至窗口管理器）。但当系统内存极低时，仍会杀死这个Activity.
+	  - STOPPED : 如果它完全被另一个Activity覆盖时，它就处于停止状态。它仍保留所有的状态和成员信息，他对用户不可见。如果其他的地方需要内存，则系统经常会杀死这个Activity。
+		
+	  Note：
+			处于PAUSED 或 STOPPED状态的Activity，可以被移除内存，移除先后顺序：STOPPED 、PAUSED 。PAUSED 只有在资源极端不足的情况才会被杀死。
+二、 生命周期
+	1.生命周期图（略）无套路版：Activity start --> onCreate() --> onStart() --> onResume() -->Activity Running --> onPause() --> onStop --> onDestry() -->Shut Down
+	2.整个生命周期： 指的就是onCreate() 到 onDestry()之间的过程。在onCreate()设置“全局”状态，onDestry()释放资源。
+	3.可见生命周期： onStart() 到 onstop()之间的过程。这期间可以在屏幕上显示。
+	4.前台的生命周期：onResume() 到 onPause()之间的过程。该期间处于所有Activity最上面，获得用户焦点。Activity可以经常性的在onResume()/onPause()状态之间切换，所以这些方法中的代码应该属于轻量级。
+	
+三、典型场景
+	1.activity从被装载到运行。onCreate() --> onStart() --> onResume() ;
+	2.从运行到暂停，再继续运行。onPuase() --> onResume();期间Activity的实例一直存在。
+	3.从运行到停止：onPuase() --> onStop();这个过程发生在UI被完全遮盖，这个过程中activity的实例仍存在。比如，按home键。
+	4.从停止到运行。onRestart() --> onStart() --> onResume();属于3的逆过程。
+	5.从运行到销毁。onPuase() --> onStop() --> onDestry(); 当Activity正在运行时，按BACK键，该Activity就会被执行这个过程。这个过程可看作是1的逆过程。
+	6.被清除出内存的Activity重新运行。onCreate() -> onStart()-> onResume();
+	
