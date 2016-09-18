@@ -1,0 +1,100 @@
+   Intent && Intent过滤器
+ 1.Intent是一个消息传递对象的载体；可以使用它从其他应用组件请求操作。尽管Intent 可以通过多种方式促进组件之间的通信，但其基本用例主要包括以下3种：
+	-- 启动Activity：
+	   通过将Intent传递给startActivity(),启动一个Activity 实例。Intent描述了要启动的Activity，并携带了任何必要的数据。
+	   如果希望在Activity完成后收到结果，调用startActivityForResult()。在Activity的onActivityResult()回调中，该Activity将结果作为单独的Intent对象接收。
+	-- 启动服务：
+		通过将Intent传递给startService(),可以启动service执行一次性操作。Intent描述了要启动的service，并携带了任何必要的数据。
+		如果service使用客户端-服务端接口，则通过将Intent传递给bindService(),可以从其他组件绑定到此服务。
+	-- 传递广播：
+		系统将针对系统事件（如：系统启动、设备充电等）传递各种广播。将Intent 传递给sendBroadcast()、sendOrderedBroadcast() 或 sendStickyBroadcast(),可以将广播传递给其他应用。
+
+ 2.Intent类型
+	Intent分为两种类型：
+		-- 显示Intent ：按名称指定要启动的组件。如启动Activity：startActivity(new Intent(Aactivity.this,Bactivity.class));
+			创建显式 Intent 启动 Activity 或服务时，系统将立即启动 Intent 对象中指定的应用组件。
+		
+		
+		-- 隐式Intent ： 不会指定特定的组件，而是声明要执行的常规操作，从而允许其他应用中的组件来处理他。
+			在AndroidManifest.xml中：
+				<activity  
+				android:name="com.example.app016.SecondActivity">  
+				<intent-filter>  
+					<action android:name="abcdefg"/>  
+					<category android:name="android.intent.category.DEFAULT"/>  
+				</intent-filter>  
+				</activity>
+			然后在MainActivity，通过action name 找到 SecondActivity:
+				Intent intent = new Intent();  
+				intent.setAction("abcdefg");  
+				startActivity(intent);  
+			
+				*[1] Activity A --> startActivity() -->  Intent --> [2] Android system --> Intent --> oncreate() -->Activity B
+				隐式 Intent 如何通过系统传递以启动其他 Activity 的图解：[1] Activity A 创建包含操作描述的 Intent，并将其传递给 startActivity()。[2] Android 系统搜索所有应用中与 Intent 匹配的 Intent 过滤器。找到匹配项之后，[3] 该系统通过调用匹配 Activity（Activity B）的 onCreate() 方法并将其传递给 Intent，以此启动匹配 Activity。	
+				
+ 3.构建Intent
+	Intent对象携带了android系统用来确定要启动哪个组件的信息，以及收件人组件为了正确执行操作而是用的信息。
+	
+	- Intent中包含的主要信息：
+		-- 组件名称：要启动的组件名称。（可选）如果有就是显示Intent；没有就是隐式Intent。
+			Intent的这一字段是ComponentName对象，可以使用目标组件的完全限定类名指定对象，其中包括应用的软件名称。如：com.example.ExamplActivity。可以使用setComponent()、setClass()、setClassName()或 Intent构造函数设置组件名称。
+		-- 操作：指定要执行的通用操作的字符串。
+	 	-- 数据：引用待操作数据或该数据MIME类型的URI对象。提供数据类型通常由Intent的操作决定。
+		-- 类别：一个包含应处理Intent组件类型的附加信息的字符串。可以将任意数量的类别描述放入一个Intent中，但大多数Intent均不需要类别。
+		-- Extra: 携带完成请求操作所需的附加信息的键值对。正如某些操作使用特定类型的数据 URI 一样，有些操作也使用特定的附加数据。
+		-- 标志：在 Intent 类中定义的、充当 Intent 元数据的标志。标志可以指示 Android 系统如何启动 Activity（例如，Activity 应属于哪个 任务 ），以及启动之后如何处理（例如，它是否属于最近的 Activity 列表）。
+	
+ 4.强制使用应用选择器
+	如果有多个应用响应隐式 Intent，则用户可以选择要使用的应用，并将其设置为该操作的默认选项。 如果用户可能希望今后一直使用相同的应用执行某项操作（例如，打开网页时，用户往往倾向于仅使用一种 Web 浏览器），则这一点十分有用。
+	要显示选择器，请使用 createChooser() 创建 Intent，并将其传递给 startActivity()。例如：
+	Intent sendIntent = new Intent(Intent.ACTION_SEND);
+	...
+
+	// Always use string resources for UI text.
+	// This says something like "Share this photo with"
+	String title = getResources().getString(R.string.chooser_title);
+	// Create intent to show the chooser dialog
+	Intent chooser = Intent.createChooser(sendIntent, title);
+
+	// Verify the original intent will resolve to at least one activity
+	if (sendIntent.resolveActivity(getPackageManager()) != null) {
+		startActivity(chooser);
+	}
+
+ 5.过滤器示例：
+	为了更好地了解一些 Intent 过滤器的行为，我们一起来看看从社交共享应用的清单文件中截取的以下片段。
+		<activity android:name="MainActivity">
+		<!-- This activity is the main entry, should appear in app launcher -->
+		<intent-filter>
+			<action android:name="android.intent.action.MAIN" />
+			<category android:name="android.intent.category.LAUNCHER" />
+		</intent-filter>
+	</activity>
+
+	<activity android:name="ShareActivity">
+		<!-- This activity handles "SEND" actions with text data -->
+		<intent-filter>
+			<action android:name="android.intent.action.SEND"/>
+			<category android:name="android.intent.category.DEFAULT"/>
+			<data android:mimeType="text/plain"/>
+		</intent-filter>
+		<!-- This activity also handles "SEND" and "SEND_MULTIPLE" with media data -->
+		<intent-filter>
+			<action android:name="android.intent.action.SEND"/>
+			<action android:name="android.intent.action.SEND_MULTIPLE"/>
+			<category android:name="android.intent.category.DEFAULT"/>
+			<data android:mimeType="application/vnd.google.panorama360+jpg"/>
+			<data android:mimeType="image/*"/>
+			<data android:mimeType="video/*"/>
+		</intent-filter>
+	</activity>
+	-- ACTION_MAIN 操作指示这是主要入口点，且不要求输入任何 Intent 数据。
+	-- CATEGORY_LAUNCHER 类别指示此 Activity 的图标应放入系统的应用启动器。
+	这两个元素必须配对使用，Activity 才会显示在应用启动器中。
+	
+ 6.	使用待定 Intent
+	PendingIntent 对象是 Intent 对象的包装器。PendingIntent 的主要目的是授权外部应用使用包含的 Intent，就像是它从您应用本身的进程中执行的一样。
+	待定 Intent 的主要用例包括：
+		-- 声明用户使用您的通知执行操作时所要执行的 Intent（Android 系统的 NotificationManager 执行 Intent）。
+		-- 声明用户使用您的 应用小工具执行操作时要执行的 Intent（主屏幕应用执行 Intent）。
+		-- 声明未来某一特定时间要执行的 Intent（Android 系统的 AlarmManager 执行 Intent）。
