@@ -1,0 +1,51 @@
+    android 序列化
+ 1.  什么是序列化和反序列化
+	序列化：把对象转换为字节序列的过程;
+	反序列化：把字节序列恢复为Java对象的过程;
+	
+	要想搞清楚序列化我们必须清楚三点：Java对象、字节序列、存储
+	- java对象：
+		Java对象包含变量与方法。但序列化与反序列化仅处理Java变量而不处理方法，序列与反序列仅对数据进行处理。
+	- 字节序列
+		其实就是连续排列的多个字符的序列，如：“dsafdsadasfsdaf”
+	- 存储
+		字符序列需要保存在一个地方，可以是硬盘也可以是内存。
+		
+ 2.为什么要使用序列化？		
+	从序列化的定义中我们可以看到他把一个对象转换成了流，并且将其保存到本地；
+	用途：
+		① 永久性保存对象，保存对象的字节序列到本地文件中。
+		② 通过序列化对象在网络中传递对象。
+		③ 通过序列化在进程间传递对象
+ 3.Java对象与Java对象序列化的区别？
+	java对象存在的前提必须在JVM运行期间存在，如果想在JVM非运行的情况下或者在其他机器JVM上获取指定java对象，java对象都无法完成。
+	与java对象不同的是，如果对java对象执行序列化操作，因为远离是吧java对象信息保存到存储媒介，所以可以在以上java对象不可能存在的两种情况下依然可以使用java对象。
+	
+ 4.	如何实现序列化
+	android实现两种方式：
+		① 实现Serializable 接口，实现容易（JavaSE本身就支持的）
+		② 实现Parcelable 接口，实现复杂（android特有功能，效率比Serializable高，可以用于Intent数据传递，也可以用于进程间通讯（IPC））
+		两种序列化比较：
+			一、Serializable 简单易用 效率低
+				这种方法的缺是使用了反射，序列化的过程较慢。这种机制会在序列化的时候创建许多的临时对象，容易触发垃圾回收。
+			二、Parcelable 速度至上，代码量大 、维护难
+				根据Google工程师的说法，这些代码将会运行地特别快。原因之一就是我们已经清楚地知道了序列化的过程，而不需要使用反射来推断。同时为了更快地进行序列化，对象的代码也需要高度优化。因此，很明显实现Parcelable并不容易。实现Parcelable接口需要写大量的模板代码，这使得对象代码变得难以阅读和维护。
+			
+			Note：serializable的作用是为了保存对象的属性到本地文件、数据库、网络流、rmi以方便数据传输，当然这种传输可以是程序内的也可以是两个程序间的。而Android的Parcelable的设计初衷是因为Serializable效率过慢，为了在程序内不同组件间以及不同Android程序间(AIDL)高效的传输数据而设计，这些数据仅在内存中存在，Parcelable是通过IBinder通信的消息的载体。	
+			
+ 5.Parcelable 接口定义
+		public interface Parcelable  
+		{  
+			//内容描述接口，基本不用管  
+			public int describeContents();  
+			//写入接口函数，打包  
+			public void writeToParcel(Parcel dest, int flags);  
+			//读取接口，目的是要从Parcel中构造一个实现了 Parcelable的类的实例处理。因为实现类在这里还是不可知的，所以需要用到模板的方式，继承类名通过模板参数<span style="white-space:pre">  </span>  传入<span style="white-space:pre">   </span>  
+			//为了能够实现模板参数的传入，这里定义Creator嵌入接口,内含两个接口函数分别返回单个和多个继承类实例  
+			public interface Creator<T>  
+			{  
+				   public T createFromParcel(Parcel source);  
+				   public T[] newArray( int size);  
+			}  
+		 }  		
+	 	 	
