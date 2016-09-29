@@ -1,0 +1,12 @@
+	android 的LaunchMode
+ 1.standard : 标准模式，这也是系统默认模式。每次启动都会启动一个Activity新的实例，不管这个实例是否存在。
+ 2.SinleTop : 栈顶复用式。如果新的Activity已经位于栈顶，那么这个Activity就不会被重新创建，同时它的onNewIntent方法会被调用。
+ 3.SingleTask : 栈内复用模式。只要Activity在一个栈中存在，那么多次启动这个Activity都不会被重新创建。
+ 4.SingleInstance : 单实例模式。这是一种加强的SingleTask模式，它除了具有singleTask所有的特性外，还加强了一点，
+					此模式下的Activity只能单独在一个任务栈中。
+	
+	android 的Flags
+ 1.FLAG_ACTIVITY_NEW_TASK == singleTask
+ 2.FLAG_ACTIVITY_SINGLE_TOP == singTop
+ 3.FLAG_ACTIVITY_CLEAR_TOP : 当它启动时，在同一栈中所有位于它上面的Activity都要出栈。
+ 4.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS : 表示该Activity不会出现在历史Activity的列表中（如果启动一个新activity，不想返回到这个Activity了就用这个，其他写法 xml ：android:excludeFromRecents="true"）。 
